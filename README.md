@@ -60,3 +60,7 @@ e. Observation
 | Random Forest       | Obtained perfect scores, demonstrating strong ensemble learning capability and excellent generalization performance.                                                                                             |
 | XGBoost             | Achieved perfect AUC and recall but lower accuracy and precision, indicating that while it correctly identifies most malignant cases, it misclassifies some benign cases, resulting in reduced overall accuracy. |
 
+--------
+f. Streamlit App Link
+--
+https://mlassignment2-2025aa05626.streamlit.app/
