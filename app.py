@@ -53,6 +53,10 @@ uploaded_file = st.sidebar.file_uploader(
     type=["csv"]
 )
 
+csv_url = "https://github.com/UjjwalMittal-wilp/ML_Assignment2_2025AA05626/blob/main/Test%20Data.csv"
+
+st.sidebar.markdown(f"[Test CSV File]({csv_url})")
+
 # Load DataSet
 def load_data():
     data = load_breast_cancer()
