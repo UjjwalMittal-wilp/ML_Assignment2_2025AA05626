@@ -1,6 +1,7 @@
 import pandas as pd
 import streamlit as st
 import seaborn as sns
+import numpy as np
 import matplotlib.pyplot as plt
 
 from sklearn.datasets import load_breast_cancer
@@ -13,7 +14,8 @@ from sklearn.metrics import (
     recall_score,
     f1_score,
     matthews_corrcoef,
-    confusion_matrix
+    confusion_matrix,
+    classification_report
 )
 
 # Import Models
@@ -72,6 +74,10 @@ X_train, X_test, y_train, y_test = train_test_split(
     stratify=y
 )
 
+X_test.to_csv("Test Data.csv", index=False)
+
+st.markdown(f"{X_train.shape[0]}")
+
 # Scaling
 scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
@@ -87,15 +93,6 @@ model_trainers = {
     "XGBoost": train_xgb
 }
 
-#Implementation
-models = [
-        "Logistic Regression",
-        "Decision Tree",
-        "K-Nearest Neighbors",
-        "Naive Bayes",
-        "Random Forest",
-        "XGBoost"
-    ]
 # Conditional Scale
 if model_name in ["Logistic Regression", "K-Nearest Neighbors"]:
     X_train_used = X_train_scaled
@@ -151,3 +148,32 @@ sns.heatmap(
 ax.set_xlabel("Predicted")
 ax.set_ylabel("Actual")
 st.pyplot(fig)
+
+# Classification Report
+st.subheader("📄 Classification Report")
+
+report = classification_report(y_test, y_pred, output_dict=True)
+report_df = pd.DataFrame(report).transpose()
+st.dataframe(report_df)
+
+# Prediction on Uploaded CSV
+
+if uploaded_file is not None:
+    st.subheader("📂 Uploaded File Predictions")
+
+    input_df = pd.read_csv(uploaded_file)
+    st.write("Preview:", input_df.head())
+
+    if model_name in ["Logistic Regression", "K-Nearest Neighbors"]:
+        input_scaled = scaler.transform(input_df)
+        preds = model.predict(input_scaled)
+    else:
+        preds = model.predict(input_df)
+
+    input_df["Prediction"] = np.where(
+        preds == 1,
+        "Malignant",
+        "Benign"
+    )
+
+    st.write("Results:", input_df)
