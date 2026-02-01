@@ -74,10 +74,6 @@ X_train, X_test, y_train, y_test = train_test_split(
     stratify=y
 )
 
-X_test.to_csv("Test Data.csv", index=False)
-
-st.markdown(f"{X_train.shape[0]}")
-
 # Scaling
 scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
